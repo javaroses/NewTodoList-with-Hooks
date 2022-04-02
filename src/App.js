@@ -1,24 +1,76 @@
 import logo from './logo.svg';
+import {useState} from 'react'
 import './App.css';
 
 function App() {
+  const [todoList, setTodoList] = useState([])
+  const [form,setForm] = useState({
+    todo:" ",
+    status: false
+  })
+
+  const resetInput=()=>{
+    setForm({
+      todo: "",
+      status: false
+    })
+  }
+  const handleChange =(e)=>{
+    setForm({
+      todo: e.target.value,
+      status: false
+    })
+  }
+
+  const handleSubmit =(e)=>{
+    e.preventDefault();
+    setTodoList([
+      ...todoList, 
+      form
+    ])
+    resetInput()
+  }
+
+  const handleCheck = (index)=>{
+    const newTodo = todoList.map((e, i) =>{
+      if(i === index){
+        return{
+          todo: e.todo,
+          status: true
+        }
+      }else{
+        return e
+      }
+    })
+   setTodoList(newTodo)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <div>
+      <div className="jumbotroon">
+          <h1>Todo List App</h1>
+          <form action="" method ="post" onSubmit={handleSubmit}className="form">
+              <button className="btn-submit" type='submit'>submit</button>
+              <input type="text" value={form.todo} onChange ={handleChange} placeholder="isi slurs.."name='todo'/>
+          </form>
+      </div>
+      
+      <div className='content'>
+        {todoList.map((e, i)=>(
+          <div key={i} className='card'>
+            <div className="action">
+              <input type="checkbox" onChange={()=>handleCheck(i)}/>
+            </div>
+            <div className="text">
+              {e.todo}
+            </div>
+          </div>
+        ))
+        }
+      </div>
+  </div>
+
+
   );
 }
 
